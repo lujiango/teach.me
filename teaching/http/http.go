@@ -2,6 +2,7 @@ package http
 
 import (
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -14,8 +15,12 @@ const (
 
 // get courses by location info.
 func GetCourses(res http.ResponseWriter, req *http.Request) {
-	log.Println(req.Body)
-	courses := service.GetCoursesByLocation("")
+	location, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(string(location))
+	courses := service.GetCoursesByLocation(string(location))
 	io.WriteString(res, courses)
 }
 func Router() {

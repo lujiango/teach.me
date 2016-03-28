@@ -1,4 +1,4 @@
-// teaching project teaching.go
+// teaching is a server
 package main
 
 import (
