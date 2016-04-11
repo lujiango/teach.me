@@ -2,10 +2,11 @@ package http
 
 import (
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
+	//	"github.com/axgle/mahonia"
 	"teach.me/teaching/service"
 )
 
@@ -14,14 +15,26 @@ const (
 )
 
 // get courses by location info.
-func GetCourses(res http.ResponseWriter, req *http.Request) {
-	location, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		log.Println(err)
+func GetCourses(w http.ResponseWriter, req *http.Request) {
+	location := req.FormValue("location")
+
+	if location == "" {
+		io.WriteString(w, "{ret:400100,msg:'location is empty'}")
+		return
 	}
-	log.Println(string(location))
-	courses := service.GetCoursesByLocation(string(location))
-	io.WriteString(res, courses)
+	timestamp := req.FormValue("timestamp")
+	if timestamp == "" {
+		timestamp = "0"
+	}
+
+	log.Println("location >>> " + location)
+	ts, err := strconv.ParseInt(timestamp, 10, 64)
+	if err != nil {
+		log.Panic(err)
+		ts = 0
+	}
+	courses := service.GetCoursesByLocation(location, ts)
+	io.WriteString(w, courses)
 }
 func Router() {
 	log.Println(">>> Add router...")
