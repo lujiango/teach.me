@@ -3,24 +3,24 @@ db.createCollection("course")
 db.course.insert(
 {
 	"cid":1,
-	"name":"操作系统",
-	"title":"很牛逼的操作系统",
+	"name":"数据结构",
+	"title":"很牛逼的数据结构",
 	"image":"http://7o51ui.com2.z0.glb.qiniucdn.com/ribaopic/2016/03/1458891158769-wc1vfizapgj3du6zbg23x1-d522f8f2334a84365bf7123c449dee11",
 	"thumbnail":"http://7o51ui.com2.z0.glb.qiniucdn.com/ribaopic/2016/03/1458891158786-tnity6ggc19rm9etwq8a93-d522f8f2334a84365bf7123c449dee11",
-	"teacherId":"1",
-	"description":"江屿老师主讲的操作系统",
+	"teacherId":1,
+	"description":"老师主讲的操作系统",
 	"location":"南京市",
 	"timestamp":"1459071043",
 	"total":200,
 	"sign":107,
 	"itemId":1,
-	"istop":1,
+	"isTop":0,
 	"timestamp":1460285350,
 	"price":200,
 	"address":"南京市江宁区",
 	"starttime":1460287343,
 	"endtime":1460287343,
-	"days":0
+	"days":2
 }
 )
 
@@ -30,6 +30,18 @@ db.teacher.insert(
 {
 "tid":1,
 "name":"江屿",
+"avatar":"http://7o51ui.com2.z0.glb.qiniucdn.com/ribaopic/2016/03/1458891158786-tnity6ggc19rm9etwq8a93-d522f8f2334a84365bf7123c449dee11",
+"age":26,
+"teachAge":3,
+"experience":"经历很牛逼",
+"sex":1,
+"isVerify":1
+}
+)
+db.teacher.insert(
+{
+"tid":2,
+"name":"陆江",
 "avatar":"http://7o51ui.com2.z0.glb.qiniucdn.com/ribaopic/2016/03/1458891158786-tnity6ggc19rm9etwq8a93-d522f8f2334a84365bf7123c449dee11",
 "age":26,
 "teachAge":3,

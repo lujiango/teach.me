@@ -10,7 +10,7 @@ const (
 	TEACHER_COLL = "teacher"
 	ITEM_COLL    = "item"
 	TOP_LIMIT    = 5
-	PAGE_SIZE    = 10
+	PAGE_SIZE    = 5
 )
 
 type Course struct {
@@ -19,7 +19,7 @@ type Course struct {
 	Title       string  `json:"title"`
 	Image       string  `json:"image"`
 	Thumbnail   string  `json:"thumbnail"`
-	TeacherId   string  `bson:"teacherId"`
+	TeacherId   string  `json:"teacherId"`
 	Description string  `json:"description"`
 	Location    string  `json:"location"`
 	Timestamp   int     `json:"timestamp"`
