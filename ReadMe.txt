@@ -1,1 +1,0 @@
-Teaching is a server
