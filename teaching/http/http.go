@@ -2,11 +2,11 @@ package http
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 
 	"teach.me/teaching/service"
+	"teach.me/teaching/tlog"
 )
 
 const (
@@ -26,22 +26,22 @@ func GetCourses(w http.ResponseWriter, req *http.Request) {
 		timestamp = "0"
 	}
 
-	log.Println("location >>> " + location)
+	tlog.Info("location : ", location)
 	ts, err := strconv.ParseInt(timestamp, 10, 64)
 	if err != nil {
-		log.Panic(err)
+		tlog.Error(err)
 		ts = 0
 	}
 	courses := service.GetCoursesByLocation(location, ts)
 	io.WriteString(w, courses)
 }
 func Router() {
-	log.Println(">>> Add router...")
+	tlog.Info(">>> Add router...")
 	http.HandleFunc(GET_COURSES_BY_LOCATION, GetCourses)
 }
 func Start() {
 	err := http.ListenAndServe(":10029", nil)
 	if err != nil {
-		log.Fatal(">>> Teaching start failed...")
+		tlog.Fatal(">>>  Teaching start failed...")
 	}
 }
