@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	//	"github.com/axgle/mahonia"
 	"teach.me/teaching/service"
 )
 
