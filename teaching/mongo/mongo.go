@@ -1,7 +1,10 @@
 package mongo
 
 import (
+	"strconv"
+
 	"gopkg.in/mgo.v2"
+	"teach.me/teaching/config"
 )
 
 const (
@@ -9,8 +12,6 @@ const (
 	COURSE_COLL  = "course"
 	TEACHER_COLL = "teacher"
 	ITEM_COLL    = "item"
-	TOP_LIMIT    = 5
-	PAGE_SIZE    = 5
 )
 
 type Course struct {
@@ -65,7 +66,7 @@ type Item struct {
 //	return courses
 //}
 func GetCollection(coll string) *mgo.Collection {
-	session, err := mgo.Dial("127.0.0.1:20822")
+	session, err := mgo.Dial(config.Gconfig.MgoServer + ":" + strconv.Itoa(config.Gconfig.MgoPort))
 	if err != nil {
 		panic(err)
 	}

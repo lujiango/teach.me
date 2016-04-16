@@ -5,12 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"teach.me/teaching/config"
 	"teach.me/teaching/service"
 	"teach.me/teaching/tlog"
-)
-
-const (
-	GET_COURSES_BY_LOCATION = "/teaching/course/_get"
 )
 
 // get courses by location info.
@@ -18,7 +15,7 @@ func GetCourses(w http.ResponseWriter, req *http.Request) {
 	location := req.FormValue("location")
 
 	if location == "" {
-		io.WriteString(w, "{ret:400100,msg:'location is empty'}")
+		io.WriteString(w, LOCATION_IS_EMPTY)
 		return
 	}
 	timestamp := req.FormValue("timestamp")
@@ -37,11 +34,11 @@ func GetCourses(w http.ResponseWriter, req *http.Request) {
 }
 func Router() {
 	tlog.Info(">>> Add router...")
-	http.HandleFunc(GET_COURSES_BY_LOCATION, GetCourses)
+	http.HandleFunc(TEACHING_INDEX, GetCourses)
 }
 func Start() {
-	err := http.ListenAndServe(":10029", nil)
+	err := http.ListenAndServe(":"+strconv.Itoa(config.Gconfig.Port), nil)
 	if err != nil {
-		tlog.Fatal(">>>  Teaching start failed...")
+		tlog.Fatal(">>> Teaching start failed...")
 	}
 }

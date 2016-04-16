@@ -33,6 +33,11 @@ func Debug(v ...interface{}) {
 	initLog("[DEBUG]")
 	logger.Output(2, fmt.Sprintln(v...))
 }
+
+func Warn(v ...interface{}) {
+	initLog("[WARN]")
+	logger.Output(2, fmt.Sprintln(v...))
+}
 func Error(v ...interface{}) {
 	initLog("[ERROR]")
 	logger.Output(2, fmt.Sprintln(v...))
