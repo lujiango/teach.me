@@ -1,0 +1,14 @@
+{
+	"server":"localhost",
+ 	"port":10066,
+	"logFile":"tlog/teaching.log",
+	"confFile":"config/config.json",
+	"topLimit":5,
+	"pageSize":10,
+	"mgoServer":"localhost",
+	"mgoPort":20822,
+	"qiNiuDomain":"http://7xsy1r.com1.z0.glb.clouddn.com/",
+	"bucket":"teaching",
+	"ak":"j_WtO1OztS8XbmbvXrPDZsA32TevwhQBtKTkNsiu",
+	"sk":"6kD_wymHWAhxRQsJwphzLlA5cQl8YJA7nCWQvwBW"
+}

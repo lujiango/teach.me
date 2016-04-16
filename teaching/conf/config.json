@@ -2,6 +2,5 @@
 	"server":"localhost",
  	"port":10029,
 	"mgoServer":"localhost",
-	"mgoPort":20822,
-	
+	"mgoPort":20822
 }
