@@ -3,7 +3,8 @@ package conf
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
+
+	"teach.me/teaching/tlog"
 )
 
 type Config struct {
@@ -13,17 +14,19 @@ type Config struct {
 	MgoPort   int    `json:"mgoPort"`
 	TopLimit  int    `json:"topLimit"`
 	PageSize  int    `json:"pageSize"`
+	LogFile   string `json:"logFile"`
 }
 
-var gConfig Config
+var Gconfig Config
 
 func SetConfig() {
-	bys, err := ioutil.ReadFile("teaching.conf")
+	tlog.Info("set config from config.json")
+	bys, err := ioutil.ReadFile("conf/config.json")
 	if err != nil {
-		log.Fatalln(err)
+		tlog.Fatal(err)
 	}
-	err = json.Unmarshal(bys, &gConfig)
-	if err := nil{
-		log.Fatalln(err)
+	err = json.Unmarshal(bys, &Gconfig)
+	if err != nil {
+		tlog.Fatal(err)
 	}
 }
