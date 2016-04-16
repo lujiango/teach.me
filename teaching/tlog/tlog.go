@@ -40,4 +40,5 @@ func Error(v ...interface{}) {
 func Fatal(v ...interface{}) {
 	initLog("[FATAL]")
 	logger.Output(2, fmt.Sprintln(v...))
+	os.Exit(1)
 }
