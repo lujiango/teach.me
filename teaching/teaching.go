@@ -2,13 +2,13 @@
 package main
 
 import (
-	"log"
-
 	"teach.me/teaching/http"
+	"teach.me/teaching/tlog"
 )
 
 func main() {
-	log.Println(">>> Teaching server started...")
+	tlog.Info(">>> Teaching server started...")
+
 	http.Router()
 	http.Start()
 }
