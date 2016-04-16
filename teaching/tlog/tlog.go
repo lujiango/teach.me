@@ -37,3 +37,7 @@ func Error(v ...interface{}) {
 	initLog("[ERROR]")
 	logger.Println(v)
 }
+func Fatal(v ...interface{}) {
+	initLog("[FATAL]")
+	logger.Fatalln(v)
+}
