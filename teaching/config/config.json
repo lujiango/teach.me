@@ -1,6 +1,6 @@
 {
 	"server":"localhost",
- 	"port":10066,
+ 	"port":10029,
 	"logFile":"tlog/teaching.log",
 	"confFile":"config/config.json",
 	"topLimit":5,
