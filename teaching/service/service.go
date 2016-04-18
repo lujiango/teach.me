@@ -14,12 +14,14 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 	var retString string = ""
 	var topString string = ""
 	var itemString string = ""
+	var bannerString string = ""
 	var dataString string = ""
+	var menuString string = ""
 	var ts int = 0
 
 	tlog.Info("timestamp : ", timestamp)
 	if timestamp == 0 {
-		//{top_courses:[],items:[],data:[],timestamp:14xxxxxxx}
+		//{topCourses:[],items:[],banners:[],datas:[],menus:[],timestamp:14xxxxxxx}
 		//step 1: get top_courses
 		var tops []bson.M
 		mongo.GetCollection(mongo.COURSE_COLL).Find(bson.M{"location": location, "isTop": 1}).Limit(config.Gconfig.TopLimit).All(&tops)
@@ -47,7 +49,20 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 			itemString = itemString + string(bi) + ","
 		}
 		itemString = itemString[:len(itemString)-1]
-		// step 3: get data
+
+		// step 3: get banner
+		var banner []bson.M
+		mongo.GetCollection(mongo.BANNER_COLL).Find(nil).All(&banner)
+		tlog.Info("banner.size : ", len(banner))
+		for _, b := range banner {
+			//remove _id
+			delete(b, "_id")
+			bi, _ := json.Marshal(b)
+			bannerString = bannerString + string(bi) + ","
+		}
+		bannerString = bannerString[:len(bannerString)-1]
+
+		// step 4: get data
 		var data []bson.M
 		mongo.GetCollection(mongo.COURSE_COLL).Find(bson.M{"location": location, "isTop": 0}).Limit(config.Gconfig.PageSize).All(&data)
 		tlog.Info("data.size : ", len(data))
@@ -67,9 +82,22 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 			}
 		}
 		dataString = dataString[:len(dataString)-1]
-		retString = "{\"top_courses\":[" + topString + "],\"items\":[" + itemString + "],\"data\":[" + dataString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
+
+		// step 5: get menu
+		var menu []bson.M
+		mongo.GetCollection(mongo.MENU_COLL).Find(nil).All(&menu)
+		tlog.Info("menu.size : ", len(menu))
+		for _, m := range menu {
+			//remove _id
+			delete(m, "_id")
+			mi, _ := json.Marshal(m)
+			menuString = menuString + string(mi) + ","
+		}
+		menuString = menuString[:len(menuString)-1]
+
+		retString = "{\"topCourses\":[" + topString + "],\"items\":[" + itemString + "],\"banners\":[" + bannerString + "],\"datas\":[" + dataString + "],\"menus\":[" + menuString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
 	} else {
-		//{data:[],timestamp:14xxxxxxx}
+		//{datas:[],timestamp:14xxxxxxx}
 		var data []bson.M
 		mongo.GetCollection(mongo.COURSE_COLL).Find(bson.M{"location": location, "timestamp": bson.M{"$lte": timestamp}}).Limit(config.Gconfig.PageSize).All(&data)
 		tlog.Info("data.size : ", len(data))
@@ -91,7 +119,7 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 			dataString = dataString[:len(dataString)-1]
 		}
 
-		retString = "{\"data\":[" + dataString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
+		retString = "{\"datas\":[" + dataString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
 	}
 	return retString
 }

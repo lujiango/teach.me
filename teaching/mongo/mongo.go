@@ -12,6 +12,8 @@ const (
 	COURSE_COLL  = "course"
 	TEACHER_COLL = "teacher"
 	ITEM_COLL    = "item"
+	BANNER_COLL  = "banner"
+	MENU_COLL    = "menu"
 )
 
 type Course struct {
