@@ -16,12 +16,12 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 	var itemString string = ""
 	var bannerString string = ""
 	var dataString string = ""
-	var menuString string = ""
+	//	var menuString string = ""
 	var ts int = 0
 
 	tlog.Info("timestamp : ", timestamp)
 	if timestamp == 0 {
-		//{topCourses:[],items:[],banners:[],datas:[],menus:[],timestamp:14xxxxxxx}
+		//{topCourses:[],items:[],banners:[],datas:[],timestamp:14xxxxxxx}
 		//step 1: get top_courses
 		var tops []bson.M
 		mongo.GetCollection(mongo.COURSE_COLL).Find(bson.M{"location": location, "isTop": 1}).Limit(config.Gconfig.TopLimit).All(&tops)
@@ -84,18 +84,18 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 		dataString = dataString[:len(dataString)-1]
 
 		// step 5: get menu
-		var menu []bson.M
-		mongo.GetCollection(mongo.MENU_COLL).Find(nil).All(&menu)
-		tlog.Info("menu.size : ", len(menu))
-		for _, m := range menu {
-			//remove _id
-			delete(m, "_id")
-			mi, _ := json.Marshal(m)
-			menuString = menuString + string(mi) + ","
-		}
-		menuString = menuString[:len(menuString)-1]
+		//		var menu []bson.M
+		//		mongo.GetCollection(mongo.MENU_COLL).Find(nil).All(&menu)
+		//		tlog.Info("menu.size : ", len(menu))
+		//		for _, m := range menu {
+		//			//remove _id
+		//			delete(m, "_id")
+		//			mi, _ := json.Marshal(m)
+		//			menuString = menuString + string(mi) + ","
+		//		}
+		//		menuString = menuString[:len(menuString)-1]
 
-		retString = "{\"topCourses\":[" + topString + "],\"items\":[" + itemString + "],\"banners\":[" + bannerString + "],\"datas\":[" + dataString + "],\"menus\":[" + menuString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
+		retString = "{\"topCourses\":[" + topString + "],\"items\":[" + itemString + "],\"banners\":[" + bannerString + "],\"datas\":[" + dataString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
 	} else {
 		//{datas:[],timestamp:14xxxxxxx}
 		var data []bson.M
