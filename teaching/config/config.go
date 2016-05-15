@@ -22,6 +22,7 @@ type Config struct {
 	Sk          string `json:"sk"`
 	ExpireToken int64  `json:expireToken`
 	Md5         string `json:md5`
+	AesKey      string `json:aesKey`
 }
 
 var Gconfig Config

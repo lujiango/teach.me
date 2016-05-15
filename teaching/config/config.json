@@ -12,5 +12,6 @@
 	"ak":"j_WtO1OztS8XbmbvXrPDZsA32TevwhQBtKTkNsiu",
 	"sk":"6kD_wymHWAhxRQsJwphzLlA5cQl8YJA7nCWQvwBW",
 	"expireToken":3600,
-	"md5":"ae8d02f1edf743d3bd8091a8607b0db4"
+	"md5":"ae8d02f1edf743d3bd8091a8607b0db4",
+	"aesKey":"sfe023f_9fd&fwfl"
 }

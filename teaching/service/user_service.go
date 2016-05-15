@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -26,6 +27,7 @@ const (
 )
 
 type Session struct {
+	Phone  string
 	Token  string
 	Expire int64
 }
@@ -34,20 +36,28 @@ type Session struct {
 var sc = make(map[string]Session, 100)
 
 //func CheckToken(token string) (bool, int) {
-//	if token == nil || len(token) == 0 {
+//	bytes, _ := base64.StdEncoding.DecodeString(token)
+//	data, err := utils.AesDecrypt(bytes, []byte(config.Gconfig.AesKey))
+//	if err != nil {
+//		tlog.Error(err)
+//		return false, 0
+//	}
+//	roken := string(data)
+//	if roken == nil || len(roken) == 0 {
 //		return false, 1
 //	}
-//	session := sc[token]
+//	session := sc[roken]
 
 //	if session == nil {
 //		return false, 2
 //	}
 //	if session.Expire < time.Now().Unix() {
+//		delete(sc, token)
 //		return false, 3
 //	}
 //	return true, 0
-
 //}
+
 /*
 1. check phone is vaild?
 2. register phone and pwd
@@ -172,9 +182,15 @@ func UserBaseLogin(w http.ResponseWriter, r *http.Request) {
 
 	var expire = time.Now().Unix() + config.Gconfig.ExpireToken
 	var token = fmt.Sprintf("%s-%d", utils.Rand().Hex(), expire)
-	session := Session{Token: token, Expire: expire}
+	session := Session{Token: token, Expire: expire, Phone: temp["phone"]}
 	sc[token] = session
-	result["token"] = token
+	et, ex := utils.AesEncrypt([]byte(token), []byte(config.Gconfig.AesKey))
+	if ex != nil {
+		tlog.Error(ex)
+		ret.HanderError(w, ex)
+		return
+	}
+	result["token"] = base64.StdEncoding.EncodeToString(et)
 	delete(result, "_id")
 	resp, ex := json.Marshal(result)
 	if ex != nil {
