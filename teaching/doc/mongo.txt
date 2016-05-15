@@ -60,54 +60,64 @@ db.teacher.insert(
 经验分享： aixue://a=experience_share
 名师答疑：aixue://a=forasked
 
+a  Fm07xw1NjXnhc61_xOrjfz5LF0KR
+b  FpUrteQXgg5wqLOqUzZZd2NItMf_
+c  FozzI5Gy8e_pncaRMMNAPU4Fz3pk
+d  FhH-rmm7gx1VQXcMZxt2go283RKC
+e  FnZm9Xut0hKB1WRB_so_Bu7RTtWv
+f  FnhIGqsvYoOUfQ30q0ZyvXv5bQZd
+g  FpCCizUdvyTGhzCKnS2D3g9J_64H
+h  Fji6qHO50Q7GiEw8bPm7oLZeJFrY
+
+
 db.item.drop()
 db.createCollection("item")
 db.item.insert({
 	"iid":1,
 	"name":"考研数学",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/Fm07xw1NjXnhc61_xOrjfz5LF0KR",
 	"url":"aixue://a=maths"
 })
 db.item.insert({
 	"iid":2,
 	"name":"考研英语",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FpUrteQXgg5wqLOqUzZZd2NItMf_",
 	"url":"aixue://a=english"
 })
 db.item.insert({
 	"iid":3,
 	"name":"考研政治",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FozzI5Gy8e_pncaRMMNAPU4Fz3pk",
 	"url":"aixue://a=politics"
 })
 db.item.insert({
 	"iid":4,
 	"name":"专业课",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FhH-rmm7gx1VQXcMZxt2go283RKC",
 	"url":"aixue://a=special"
 })
 db.item.insert({
 	"iid":5,
 	"name":"视频",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FnZm9Xut0hKB1WRB_so_Bu7RTtWv",
 	"url":"aixue://a=video"
 })
 db.item.insert({
 	"iid":6,
 	"name":"历年真题",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FnhIGqsvYoOUfQ30q0ZyvXv5bQZd",
 	"url":"aixue://a=exam"
 })
 db.item.insert({
 	"iid":7,
 	"name":"经验分享",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FpCCizUdvyTGhzCKnS2D3g9J_64H",
 	"url":"aixue://a=experience_share"
 })
 db.item.insert({
 	"iid":8,
 	"name":"名师答疑",
-	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/FspzZ1FCY9UB63D4S-6XmU4xySgd",
+	"icon":"http://7xsy1r.com1.z0.glb.clouddn.com/Fji6qHO50Q7GiEw8bPm7oLZeJFrY",
 	"url":"aixue://a=forasked"
 })
 
