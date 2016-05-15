@@ -7,10 +7,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2/bson"
 	"teach.me/teaching/config"
+	"teach.me/teaching/http/req"
 	"teach.me/teaching/http/ret"
 	"teach.me/teaching/mongo"
 	"teach.me/teaching/tlog"
@@ -22,18 +24,6 @@ const (
 	TOKEN_EXPIRE  = 2
 	TOKEN_ILLEGAL = 3
 )
-
-type User struct {
-	Name     string `json:name`
-	NickName string `json:nickName`
-	Phone    string `json:phone`
-	Avatar   string `json:avatar`
-	Sex      int    `json:sex`
-	City     string `json:city`
-	Token    string `json:token`
-}
-
-type TokenError int
 
 type Session struct {
 	Token  string
@@ -58,21 +48,66 @@ var sc = make(map[string]Session, 100)
 //	return true, 0
 
 //}
+/*
+1. check phone is vaild?
+2. register phone and pwd
+3. if success, then auto login
 
+
+*/
 func UserBaseReg(w http.ResponseWriter, r *http.Request) {
-	bs, err := ioutil.ReadAll(r.Body)
+	// 0. parse parameter from request
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		tlog.Error(err)
 		ret.HanderError(w, err)
 		return
 	}
 	var user map[string]string
-	err = json.Unmarshal(bs, &user)
+	err = json.Unmarshal(body, &user)
 	if err != nil {
 		tlog.Error(err)
 		ret.HanderError(w, err)
 		return
 	}
+	// 1. check whether phone is vaild?
+	checkUrl := fmt.Sprintf("http://%s:%d%s", config.Gconfig.Server, config.Gconfig.Port, req.TEACHING_USER_BASE_PHONE_CHECK)
+	res, ex := http.Post(checkUrl, "application/json;charset=utf-8", strings.NewReader("{\"phone\":\""+user["phone"]+"\"}"))
+	if ex != nil {
+		tlog.Error(ex)
+		ret.HanderError(w, ex)
+		return
+	}
+	defer res.Body.Close()
+	body, ex = ioutil.ReadAll(res.Body)
+	if ex != nil {
+		tlog.Error(ex)
+		ret.HanderError(w, ex)
+		return
+	}
+
+	if res.StatusCode != http.StatusOK {
+		tlog.Error(res.Body)
+		w.WriteHeader(res.StatusCode)
+		io.WriteString(w, string(body))
+		return
+	}
+	var vaild map[string]int
+
+	ex = json.Unmarshal(body, &vaild)
+	if ex != nil {
+		tlog.Error(ex)
+		ret.HanderError(w, ex)
+		return
+	}
+
+	if vaild["vaild"] != 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, ret.USER_IS_EXIST)
+		return
+	}
+
+	// 2. register phone and pwd
 	user["name"] = user["phone"]
 	user["nickName"] = user["phone"]
 	user["avatar"] = ""
@@ -84,16 +119,37 @@ func UserBaseReg(w http.ResponseWriter, r *http.Request) {
 		ret.HanderError(w, err)
 		return
 	}
-	//	url := fmt.Sprintf("http://%s:%d%s", config.Gconfig.Server, config.Gconfig.Port, req.TEACHING_USER_BASE_LOGIN)
-	//	http.Post(url, "application/json;charset=utf-8")
-	UserBaseLogin(w, r)
+	// 3. if success, then auto login
+	url := fmt.Sprintf("http://%s:%d%s", config.Gconfig.Server, config.Gconfig.Port, req.TEACHING_USER_BASE_LOGIN)
+	res, ex = http.Post(url, "application/json;charset=utf-8", strings.NewReader("{\"phone\":\""+user["phone"]+"\", \"pwd\":\""+user["pwd"]+"\"}"))
+	if ex != nil {
+		tlog.Error(ex)
+		ret.HanderError(w, ex)
+		return
+	}
+	defer res.Body.Close()
+	body, ex = ioutil.ReadAll(res.Body)
+	if ex != nil {
+		tlog.Error(ex)
+		ret.HanderError(w, ex)
+		return
+	}
+
+	if res.StatusCode != http.StatusOK {
+		tlog.Error(res.Body)
+		w.WriteHeader(res.StatusCode)
+		io.WriteString(w, string(body))
+		return
+	}
+	w.WriteHeader(res.StatusCode)
+	io.WriteString(w, string(body))
 }
 
+/**
+login  by phone and pwd
+*/
 func UserBaseLogin(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Body)
 	body, err := ioutil.ReadAll(r.Body)
-	fmt.Println(body)
-	fmt.Println(string(body))
 	if err != nil {
 		tlog.Error(err)
 		ret.HanderError(w, err)
@@ -108,7 +164,6 @@ func UserBaseLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	var result bson.M
 	mongo.GetCollection(mongo.USER_COLL).Find(bson.M{"phone": temp["phone"], "pwd": temp["pwd"]}).One(&result)
-	fmt.Println(result)
 	if len(result) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
 		io.WriteString(w, ret.USER_CHECK_FAILED)
@@ -120,6 +175,7 @@ func UserBaseLogin(w http.ResponseWriter, r *http.Request) {
 	session := Session{Token: token, Expire: expire}
 	sc[token] = session
 	result["token"] = token
+	delete(result, "_id")
 	resp, ex := json.Marshal(result)
 	if ex != nil {
 		tlog.Error(ex)
@@ -130,17 +186,24 @@ func UserBaseLogin(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	io.WriteString(w, string(resp))
 }
+
+/*
+whether phone is registed?
+
+*/
 func UserBasePhoneCheck(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		tlog.Error(err)
 		ret.HanderError(w, err)
+		return
 	}
 	var u map[string]string
 	err = json.Unmarshal(body, &u)
 	if err != nil {
 		tlog.Error(err)
 		ret.HanderError(w, err)
+		return
 	}
 	var result bson.M
 	mongo.GetCollection(mongo.USER_COLL).Find(bson.M{"phone": u["phone"]}).One(&result)
@@ -149,5 +212,6 @@ func UserBasePhoneCheck(w http.ResponseWriter, r *http.Request) {
 		vaild = 0
 	}
 	w.WriteHeader(http.StatusOK)
-	io.WriteString(w, "{vaild:"+strconv.Itoa(vaild)+"}")
+
+	io.WriteString(w, "{\"vaild\" : "+strconv.Itoa(vaild)+"}")
 }
