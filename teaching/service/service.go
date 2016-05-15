@@ -83,18 +83,6 @@ func GetCoursesByLocation(location string, timestamp int64) string {
 		}
 		dataString = dataString[:len(dataString)-1]
 
-		// step 5: get menu
-		//		var menu []bson.M
-		//		mongo.GetCollection(mongo.MENU_COLL).Find(nil).All(&menu)
-		//		tlog.Info("menu.size : ", len(menu))
-		//		for _, m := range menu {
-		//			//remove _id
-		//			delete(m, "_id")
-		//			mi, _ := json.Marshal(m)
-		//			menuString = menuString + string(mi) + ","
-		//		}
-		//		menuString = menuString[:len(menuString)-1]
-
 		retString = "{\"topCourses\":[" + topString + "],\"items\":[" + itemString + "],\"banners\":[" + bannerString + "],\"datas\":[" + dataString + "],\"timestamp\":" + strconv.Itoa(ts) + "}"
 	} else {
 		//{datas:[],timestamp:14xxxxxxx}

@@ -10,5 +10,7 @@
 	"qiNiuDomain":"http://7xsy1r.com1.z0.glb.clouddn.com/",
 	"bucket":"teaching",
 	"ak":"j_WtO1OztS8XbmbvXrPDZsA32TevwhQBtKTkNsiu",
-	"sk":"6kD_wymHWAhxRQsJwphzLlA5cQl8YJA7nCWQvwBW"
+	"sk":"6kD_wymHWAhxRQsJwphzLlA5cQl8YJA7nCWQvwBW",
+	"expireToken":3600,
+	"md5":"ae8d02f1edf743d3bd8091a8607b0db4"
 }
